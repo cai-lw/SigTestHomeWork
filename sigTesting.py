@@ -1,8 +1,6 @@
 import numpy as np
 from numpy import genfromtxt
-from scipy.stats import ttest_ind
-from scipy.stats import ks_2samp
-from scipy.stats import wilcoxon
+from scipy.stats import ttest_ind, ttest_rel, ks_2samp, wilcoxon
 import matplotlib.pyplot as plt
 import csv
 
@@ -18,7 +16,6 @@ class SignificanceTesting(object):
                          'Baseline+Ordering_RSU4', 'Baseline+Ordering+Fusion_RSU4']
         table = genfromtxt(self.filePath, delimiter=',', skip_header=True).transpose()
         self.data = dict(zip(models_scores, table))
-
 
     def ksTest(self, listA, listB):
         value, pvalue = ks_2samp(listA, listB)
@@ -72,7 +69,7 @@ class SignificanceTesting(object):
             resultsData[row][4] = self.wilcoxonTest(listA, listB)
             resultsData[row][5] = self.ksTest(listA, listB)
 
-        with open('SigTestResults.csv', 'w') as resultsFile:
+        with open('SigTestResultsInd.csv', 'w') as resultsFile:
             writer = csv.writer(resultsFile)
             writer.writerows(resultsData)
 
@@ -82,7 +79,6 @@ class SignificanceTesting(object):
         plt.xticks(fontsize=7, rotation=-20, ha='left')
         plt.tight_layout()
         plt.show()
-        
 
 
 if __name__ == '__main__':
